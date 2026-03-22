@@ -1,26 +1,25 @@
 const mongoose = require('mongoose')
-const bcrypt = require('bcrypt');
-
+const bcrypt = require('bcrypt')
 
 const userSchema = mongoose.Schema({
-    email: {
+    email : {
         type: String,
-        required: [true,"email is requiredd for creating account"],
+        required: [true, "email is required for creating an account"],
         trim: true,
         lowercase: true,
-        match : [/emailvalidationregex/,"enter a vaild mail id"],
-        unique: [true, "email already exists"]
+        match: [/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,"enter a valid email"],
+        unique: [true,"email already exists"]
     },
 
-    name : {
+    name: {
         type: String,
-        required: [true, "name is required to create an account"]
+        required: [true, " name is required for creating an account"]
     },
 
     password: {
         type: String,
-        required: [true, "password is required to create an account"],
-        length: [6, "password should be min of 6 characters"]
+        required: [true, "password is required for creating an account"],
+        length: [6,"password should be min length of 6"]
     },
 
     timestamps: {
@@ -29,20 +28,20 @@ const userSchema = mongoose.Schema({
 })
 
 userSchema.pre("save", async (next) => {
-    if(!this.isModified("password")){
+    if(!this.isModified) {
         return next()
     }
 
     const hash = await bcrypt.hash("password",10)
     this.password = hash
-    
-    return next()
+
+    return next();
 })
 
-userSchema.methods.comparePassword = async (password) => {
-    return await bcrypt.compare(password,this.password);
+userSchema.methods.comparePasswords = async (password) => {
+    return await bcrypt.compare(password, this.password)
 }
 
-const userModel = mongoose.Model("userModels", userModel)
+const userModel = mongoose.Model("user", userSchema)
 
-modules.export = userModel;
+module.exports = userModel;
