@@ -17,7 +17,7 @@ const userRegisterController = async () => {
     const token = jwt.sign({userId : user._id},process.env.JWT_SECRET, {expiresIn : "3d"})
 
     res.cookies("token", token)
-    
+
 
     res.status(201).json({
         user :  {
@@ -25,6 +25,7 @@ const userRegisterController = async () => {
         email:user.email,
         password: user.password
         },
+        
         token
         
     })
