@@ -1,6 +1,6 @@
 const userModel = require('../models/user.model')
 
-const userRegisterController = async () => {
+const userRegisterController = async (req, res) => {
     const {email, name, password} = req.body;
 
     const isEmail = await userModel.findOne({
@@ -13,6 +13,7 @@ const userRegisterController = async () => {
             status: failed
         })
     }
+    
 
     const token = jwt.sign({userId : user._id},process.env.JWT_SECRET, {expiresIn : "3d"})
 
@@ -25,7 +26,7 @@ const userRegisterController = async () => {
         email:user.email,
         password: user.password
         },
-        
+
         token
         
     })
